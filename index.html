@@ -1185,6 +1185,43 @@
       border-width: 0 1px 1px 0
     }
 
+    .couple-portrait {
+      flex: 1;
+      min-width: 280px;
+      max-width: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .portrait-frame {
+      width: 100%;
+      position: relative;
+      border: 1px solid rgba(201, 168, 76, .2);
+      padding: 1.5rem;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .04), rgba(201, 168, 76, .06));
+      backdrop-filter: blur(8px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .4);
+      transition: transform .6s cubic-bezier(.23, 1, .32, 1), box-shadow .6s ease, border-color .6s ease;
+    }
+
+    .portrait-frame:hover {
+      transform: translateY(-8px) rotateX(1deg);
+      border-color: var(--gold-light);
+      box-shadow: 0 24px 60px rgba(201, 168, 76, .15);
+    }
+
+    .portrait-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border: 1px solid rgba(201, 168, 76, .1);
+      filter: sepia(0.12) contrast(1.05);
+      aspect-ratio: 1 / 1;
+    }
+
     .card-role {
       font-family: 'Cinzel', serif;
       font-size: .55rem;
@@ -2911,6 +2948,11 @@
   <div id="petals-container" aria-hidden="true"
     style="position:fixed;inset:0;pointer-events:none;z-index:3;overflow:hidden;display:none"></div>
 
+  <!-- BACKGROUND AUDIO -->
+  <audio id="bg-audio" loop preload="auto">
+    <source src="media/audio/AD1.mp3" type="audio/mpeg">
+  </audio>
+
   <!-- MUSIC PLAYER -->
   <div id="music-player" role="button" aria-label="Toggle background music" tabindex="0">
     <div id="music-bars">
@@ -2972,7 +3014,7 @@
 
   <!-- ══════════════════════════════════════
      PRELOADER
-══════════════════════════════════════ -->
+  ══════════════════════════════════════ -->
   <div id="preloader" role="dialog" aria-label="Wedding invitation entrance" aria-modal="true">
     <canvas id="pre-canvas" aria-hidden="true"></canvas>
     <div class="pre-rings" aria-hidden="true">
@@ -3199,6 +3241,15 @@
           <p class="card-parents-label">Son of</p>
           <p class="card-parents">Sri. Sivakumar<br>&amp;<br>Smt. Ushanandhini</p>
         </article>
+        <div class="couple-portrait reveal" aria-label="Abishek and Divyasree portrait">
+          <div class="portrait-frame">
+            <div class="cc-corner cc-tl" aria-hidden="true"></div>
+            <div class="cc-corner cc-tr" aria-hidden="true"></div>
+            <div class="cc-corner cc-bl" aria-hidden="true"></div>
+            <div class="cc-corner cc-br" aria-hidden="true"></div>
+            <img src="media/images/wedding.png" alt="Abishek and Divyasree Portrait" class="portrait-img">
+          </div>
+        </div>
         <article class="couple-card reveal-right" aria-label="Bride information">
           <div class="cc-corner cc-tl" aria-hidden="true"></div>
           <div class="cc-corner cc-tr" aria-hidden="true"></div>
@@ -3742,30 +3793,22 @@
 
     // ══ MUSIC PLAYER ══
     let musicPlaying = false;
-    let audioCtx = null;
     const musicBtn = document.getElementById('music-player');
     const mbars = document.querySelectorAll('.mbar');
+    const bgAudio = document.getElementById('bg-audio');
+
     function toggleMusic() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        // Create soft ambient tone
-        const osc1 = audioCtx.createOscillator();
-        const osc2 = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        osc1.type = 'sine'; osc1.frequency.setValueAtTime(220, audioCtx.currentTime);
-        osc2.type = 'sine'; osc2.frequency.setValueAtTime(330, audioCtx.currentTime);
-        gainNode.gain.setValueAtTime(.04, audioCtx.currentTime);
-        osc1.connect(gainNode); osc2.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        osc1.start(); osc2.start();
-        window._ambientOscs = [osc1, osc2, gainNode];
-      }
+      if (!bgAudio) return;
       musicPlaying = !musicPlaying;
       if (musicPlaying) {
-        if (window._ambientOscs) { window._ambientOscs[2].gain.setValueAtTime(.04, audioCtx.currentTime) }
-        mbars.forEach(b => b.classList.remove('paused'));
+        bgAudio.play().then(() => {
+          mbars.forEach(b => b.classList.remove('paused'));
+        }).catch(err => {
+          console.error("Audio playback failed:", err);
+          musicPlaying = false;
+        });
       } else {
-        if (window._ambientOscs) { window._ambientOscs[2].gain.setValueAtTime(0, audioCtx.currentTime) }
+        bgAudio.pause();
         mbars.forEach(b => b.classList.add('paused'));
       }
     }
@@ -3819,6 +3862,8 @@
           if (window._stopPreCanvas) window._stopPreCanvas();
           main.classList.add('visible');
           initAllCanvases(); initCountdown(); initScrollReveal(); initNav(); createPetals();
+          // Start background music automatically on entry
+          if (!musicPlaying) toggleMusic();
         }, 1200);
       }, 300);
     });
