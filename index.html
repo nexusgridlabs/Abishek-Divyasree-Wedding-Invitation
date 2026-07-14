@@ -1099,13 +1099,28 @@
 
     .couple-cards {
       display: flex;
+      flex-direction: column;
+      align-items: center;
       gap: 2.5rem;
       justify-content: center;
-      flex-wrap: wrap;
       margin-top: 3rem;
       max-width: 900px;
       margin-left: auto;
       margin-right: auto
+    }
+
+    @media (min-width: 992px) {
+      .couple-cards {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        max-width: 1200px
+      }
+
+      .couple-card,
+      .couple-portrait {
+        max-width: 360px
+      }
     }
 
     .couple-card {
@@ -1197,6 +1212,7 @@
 
     .portrait-frame {
       width: 100%;
+      aspect-ratio: 3 / 4;
       position: relative;
       border: 1px solid rgba(201, 168, 76, .2);
       padding: 1.5rem;
@@ -1215,11 +1231,11 @@
     .portrait-img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
       display: block;
       border: 1px solid rgba(201, 168, 76, .1);
       filter: sepia(0.12) contrast(1.05);
-      aspect-ratio: 1 / 1;
     }
 
     .card-role {
@@ -3121,12 +3137,12 @@
 
       <p class="hero-venue-hint reveal">Sri Varaha Convention Center, Chennai</p>
 
-      <div class="hero-scroll-hint" aria-hidden="true">
+      <!-- <div class="hero-scroll-hint" aria-hidden="true">
         <div class="scroll-mouse">
           <div class="scroll-wheel"></div>
         </div>
         <span class="scroll-hint-text">Scroll to explore</span>
-      </div>
+      </div> -->
     </section>
 
     <div class="section-divider" aria-hidden="true">
@@ -3239,7 +3255,8 @@
           <div class="card-full-name">R &nbsp; S</div>
           <div class="card-divider"></div>
           <p class="card-parents-label">Son of</p>
-          <p class="card-parents">Sri. Sivakumar<br>&amp;<br>Smt. Ushanandhini</p>
+          <p class="card-parents">Sri. Sivakumar<br>&amp;<br>Smt. Ushanandhini</p><br>
+          <p class="card-parents">Every step has led me to this beautiful moment. With gratitude in my heart and dreams in my eyes, I eagerly await the day I begin my forever journey with my beloved bride.</p>
         </article>
         <div class="couple-portrait reveal" aria-label="Abishek and Divyasree portrait">
           <div class="portrait-frame">
@@ -3247,7 +3264,7 @@
             <div class="cc-corner cc-tr" aria-hidden="true"></div>
             <div class="cc-corner cc-bl" aria-hidden="true"></div>
             <div class="cc-corner cc-br" aria-hidden="true"></div>
-            <img src="media/images/wedding.png" alt="Abishek and Divyasree Portrait" class="portrait-img">
+            <img src="media/images/Couples.png" alt="Abishek and Divyasree Portrait" class="portrait-img">
           </div>
         </div>
         <article class="couple-card reveal-right" aria-label="Bride information">
@@ -3260,7 +3277,9 @@
           <div class="card-full-name">T</div>
           <div class="card-divider"></div>
           <p class="card-parents-label">Daughter of</p>
-          <p class="card-parents">Sri. Thirugnanasambandam<br>&amp;<br>Smt. Visalakshi</p>
+          <p class="card-parents">Sri. Thirugnanasambandam<br>&amp;<br>Smt. Visalakshi</p><br>
+          <p class="card-parents">My heart is filled with love, joy, and endless dreams. As the countdown begins, I eagerly await the magical day when we celebrate our forever surrounded by family and friends.</p>
+
         </article>
       </div>
     </section>
@@ -3755,7 +3774,8 @@
       </div>
       <div class="footer-rule" aria-hidden="true"></div>
       <p class="footer-names">Abishek R S <br />&<br /> Divyasree T</p>
-      <p class="footer-tiny" style="font-size: 30px; color: #EFBF04; font-family: Cormorant Garamond;">Our journey to forever starts here</p>
+      <p class="footer-tiny" style="font-size: 30px; color: #EFBF04; font-family: Cormorant Garamond;">Our journey to
+        forever starts here</p>
     </footer>
 
   </div><!-- /main-site -->
